@@ -1,0 +1,18 @@
+<nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-position-top-center">
+        <h3 class="uk-text-large uk-text-danger">RSS articles</h3>
+    </div>
+    <div style="padding:20px;">
+        <ul class="uk-navbar-nav">
+            <li class="uk-active"><a [routerLink]="[ '/mainpage']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Main</a></li>
+            <li class="uk-active"> <a [routerLink]="[ '/article']"  routerLinkActive="active">Article</a></li>
+            <li class="uk-active"><a [routerLink]="[ '/login']"  routerLinkActive="active">Login</a></li>
+        </ul>
+    </div>
+</nav>
+  <div class="flex uk-height-large uk-flex-center">
+    <router-outlet></router-outlet>
+  </div>
+ 
+ 
+

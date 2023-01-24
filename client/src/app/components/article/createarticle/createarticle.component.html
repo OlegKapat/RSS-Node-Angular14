@@ -1,0 +1,85 @@
+
+<div class="body">
+ 
+  <h1>Create Article</h1>
+  <a class="arrow" [routerLink]="['/article']" uk-slidenav-previous></a>
+  <form
+    class="uk-grid-small"
+    [formGroup]="form"
+    (ngSubmit)="addarticle()"
+    uk-grid
+  >
+    <div class="uk-width-1-1">
+      <input
+        class="uk-input uk-width-1-2"
+        type="text"
+        placeholder="Title"
+        formControlName="title"
+      />
+    </div>
+    <div class="uk-width-1-1">
+      <input
+        class="uk-input uk-width-1-2"
+        type="text"
+        placeholder="Category"
+        formControlName="categories"
+      />
+    </div>
+    <div class="uk-width-1-1">
+      <textarea
+        class="uk-textarea uk-width-1-2"
+        rows="5"
+        placeholder="Content"
+        formControlName="content"
+      ></textarea>
+    </div>
+    <div class="uk-width-1-1">
+      <textarea
+        class="uk-textarea uk-width-1-2"
+        rows="5"
+        placeholder="ContentSnippet"
+        formControlName="contentSnippet"
+      ></textarea>
+    </div>
+    <div class="uk-width-1-1">
+      <input
+        class="uk-input uk-width-1-2"
+        type="text"
+        placeholder="Creator"
+        formControlName="creator"
+      />
+    </div>
+    <div class="uk-width-1-1">
+        <input
+          class="uk-input uk-width-1-2"
+          type="text"
+          placeholder="Link"
+          formControlName="link"
+        />
+      </div>
+    <div class="uk-width-1-1">
+      <input class="uk-input uk-width-1-2" type="text" formControlName="guid" />
+    </div>
+    <div class="uk-width-1-1">
+      <label for="dateofbirth">Iso date</label>
+      <input
+        type="date"
+        id="start"
+        name="trip-start"
+        formControlName="isoDate"
+      />
+    </div>
+    <div class="uk-width-1-1">
+      <label for="dateofbirth">Publish date</label>
+      <input
+        type="date"
+        id="start"
+        name="trip-start"
+        formControlName="pubDate"
+      />
+    </div>
+    <div class="uk-width-1-1">
+      <button class="uk-button uk-button-primary" type="submit">Create</button>
+    </div>
+  </form>
+</div>

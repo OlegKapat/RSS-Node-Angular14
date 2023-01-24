@@ -1,0 +1,41 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+  grid-gap: 10px;
+  margin-top: 20px !important;
+  & .uk-card-body {
+    padding: 20px;
+  }
+ 
+  & .badge {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: auto;
+    & .title-badge {
+      font-size: 12px;
+      color: azure;
+    }
+  }
+  & .right-center {
+    float: right;
+  }
+  & .link {
+    font-size: 10px;
+  }
+}
+.uk-active:hover {
+  color: black;
+}
+.uk-active {
+  display: inline-block;
+  margin-left: 10px;
+}
+.active {
+  color: red;
+}
+ .manager{
+  width: 30%;
+  margin: 12% 0 0 30vw;
+  display: flex; 
+  flex-direction: row;
+}

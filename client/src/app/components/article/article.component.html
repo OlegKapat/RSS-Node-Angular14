@@ -1,0 +1,110 @@
+<ng-container *ngIf="activeRoute">
+  <div class="manager">
+    <input
+      [(ngModel)]="find"
+      class="uk-search-input"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+    />
+    <select class="uk-select" style="float: left" (change)="onSelected($event)">
+      <option [value]="sort" *ngFor="let sort of filter">
+        {{ sort }}
+      </option>
+    </select>
+    <button (click)="getFiltereData()" class="uk-button uk-button-primary">
+      Apply
+    </button>
+  </div>
+  <div class="uk-grid-large">
+    <div class="grid" style="margin-top: 10%">
+      <div
+        class="uk-card uk-card-secondary uk-card-body"
+        *ngFor="let item of allarticle; let i = index"
+      >
+        <article class="uk-article">
+          <div class="inline">
+            <span
+              class="uk-article-title uk-text-italic uk-text-secondary uk-text-small"
+            >
+              {{ item.title }}
+            </span>
+            <div class="uk-inline right-center">
+              <a uk-icon="icon: more-vertical"></a>
+              <div uk-dropdown="pos: top-right">
+                <ul class="uk-nav uk-dropdown-nav">
+                  <li class="uk-active" style="color: black">
+                    <a [routerLink]="['create']" routerLinkActive="active"
+                      >Create article</a
+                    >
+                  </li>
+                  <li class="uk-active">
+                    <a
+                      (click)="sendData()"
+                      [routerLink]="['update/', item._id]"
+                      routerLinkActive="active"
+                      >Update article</a
+                    >
+                  </li>
+                  <li class="uk-active">
+                    <a (click)="delete(item._id)" routerLinkActive="active"
+                      >Delete article</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p>{{ item.contentSnippet }}</p>
+          </div>
+
+          <div class="badge">
+            <span class="title-badge">Categories :</span>
+            <div *ngFor="let badge of item.categories">
+              <div class="uk-badge">{{ badge }}</div>
+            </div>
+          </div>
+
+          <i
+            ><a class="uk-text-small link">{{ item.link }}</a></i
+          >
+          <div>
+            <span class="uk-text-small uk-text-bold"
+              >Author: {{ item.creator }}</span
+            ><br />
+            <i class="uk-text-small"
+              >Publish date: {{ item.pubDate | date : "shortDate" }}</i
+            ><br />
+            <i class="uk-text-small"
+              >Iso date :{{ item.isoDate | date : "shortDate" }}</i
+            >
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+  <ul class="uk-pagination uk-flex-center" *ngIf="allarticle.length >= limit " uk-margin>
+    <li>
+      <a (click)="firstPage()"><span uk-pagination-previous></span></a>
+    </li>
+    <li>
+      <a
+        ><li
+          class="uk-active"
+          (click)="loadMore($event); activeIndex = i + 1"
+          *ngFor="let item of arr; let i = index"
+          [class.active]="i + 1 === activeIndex"
+          value="{{ item }}"
+        >
+          {{ item + 1 }}
+        </li></a
+      >
+    </li>
+    <li>
+      <a (click)="lastPage()"><span uk-pagination-next></span></a>
+    </li>
+  </ul>
+</ng-container>
+
+<router-outlet></router-outlet>
