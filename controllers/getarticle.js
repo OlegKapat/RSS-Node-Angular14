@@ -12,19 +12,19 @@ module.exports.getarticle = async function (req, res) {
       unique: true,
       sparse: true,
       expireAfterSeconds: 3600,
-      default_language:"non"
+      default_language: "non",
     },
   ]);
   try {
     // Pagination
     const pageNumber = parseInt(req.query.pageNumber);
-    const queryRegx = new RegExp(req.query.find,"i");
+    const queryRegx = new RegExp(req.query.find, "i");
     const limit = parseInt(req.query.limit);
     const sort = req.query.sort ? req.query.sort : "";
     const result = {};
     const totalArticle = await ArticleDTO.countDocuments().exec();
 
-    let startIndex = pageNumber * limit;
+    let startIndex = queryRegx ? null : pageNumber * limit;
     const endIndex = (pageNumber + 1) * limit;
 
     result.totalArticle = totalArticle;
@@ -41,15 +41,14 @@ module.exports.getarticle = async function (req, res) {
       };
     }
 
-    var artfromdb = await ArticleDTO.find( {
-     // $text: { $search: req.query.find, $caseSensitive:false }
-     $or: [ { title: req.query.find}] 
-    }
-  
-   )
+    var artfromdb = await ArticleDTO.find({
+      // $text: { $search: queryRegx , $caseSensitive:false }
+      // or this query
+      //$or: [ { title:queryRegx:queryRegx},{content:queryRegx},{creator:queryRegx}, {link:queryRegx}]
+    })
       .sort(sort)
-      //.skip(startIndex)
-      //.limit(limit)
+      .skip(startIndex)
+      .limit(limit)
       .exec();
     result.rowsPerPage = limit;
     if (artfromdb.length == 0) {
