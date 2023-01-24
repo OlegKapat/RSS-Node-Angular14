@@ -42,7 +42,7 @@ module.exports.getarticle = async function (req, res) {
     }
 
     var artfromdb = await ArticleDTO.find({
-      // $text: { $search: queryRegx , $caseSensitive:false }
+       $text: { $search: queryRegx , $caseSensitive:false }
       // or this query
       //$or: [ { title:queryRegx:queryRegx},{content:queryRegx},{creator:queryRegx}, {link:queryRegx}]
     })
