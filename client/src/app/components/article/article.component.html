@@ -7,13 +7,16 @@
       placeholder="Search"
       aria-label="Search"
     />
+    <button (click)="getFileredArticle()" class="uk-button uk-button-primary">
+      Search
+    </button>
     <select class="uk-select" style="float: left" (change)="onSelected($event)">
       <option [value]="sort" *ngFor="let sort of filter">
         {{ sort }}
       </option>
     </select>
-    <button (click)="getFiltereData()" class="uk-button uk-button-primary">
-      Apply
+    <button (click)="getAllArtcicle()" class="uk-button uk-button-primary">
+      Sort
     </button>
   </div>
   <div class="uk-grid-large">

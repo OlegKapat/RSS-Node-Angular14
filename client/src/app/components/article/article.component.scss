@@ -6,7 +6,7 @@
   & .uk-card-body {
     padding: 20px;
   }
- 
+
   & .badge {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -33,9 +33,15 @@
 .active {
   color: red;
 }
- .manager{
-  width: 30%;
+.manager {
+  width: 50%;
   margin: 12% 0 0 30vw;
-  display: flex; 
+  display: flex;
   flex-direction: row;
+  & .uk-select {
+    margin-left: 10px;
+  }
+}
+.uk-button {
+  margin-left: 10px;
 }

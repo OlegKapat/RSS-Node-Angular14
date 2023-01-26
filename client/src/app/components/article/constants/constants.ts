@@ -3,6 +3,7 @@ export const API_Methods = {
   update_article: 'update',
   create_article: 'create',
   delete_article: 'delete',
+  get_filteredarticle: 'getfilteredarticle',
 };
 
 export const Login_Methods={

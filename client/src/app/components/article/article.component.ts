@@ -19,7 +19,7 @@ export class ArticleComponent implements OnInit, AfterViewInit, OnDestroy {
   public allarticle: Artticle[] = [];
   public destroy$: Subject<boolean> = new Subject<boolean>();
   public activeRoute: boolean = true;
-  public pageNumber: number=1;
+  public pageNumber: number = 1;
   public limit = limit;
   public articleLength!: number;
   public currentId!: string;
@@ -27,7 +27,7 @@ export class ArticleComponent implements OnInit, AfterViewInit, OnDestroy {
   public params!: {};
   public arr!: number[];
   public filter = Filter_Array;
-  public find!:number | string;
+  public find!: number | string;
   public sort!: string;
 
   constructor(
@@ -50,8 +50,8 @@ export class ArticleComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
   }
- 
-  getAllArtcicle() {
+
+  public getAllArtcicle() {
     this.params = Object.assign(
       {},
       {
@@ -61,7 +61,7 @@ export class ArticleComponent implements OnInit, AfterViewInit, OnDestroy {
         find: this.find,
       }
     );
-    
+
     this.articleService
       .getArticle(this.params)
       .pipe(
@@ -77,6 +77,21 @@ export class ArticleComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((data: any) => {
         this.allarticle = data.artfromdb;
         this.articleLength = data.totalArticle;
+      });
+  }
+
+  public getFileredArticle() {
+    this.params = Object.assign(
+      {},
+      {
+        find: this.find,
+      }
+    );
+    this.articleService
+      .getFilteredArticle(this.params)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: any) => {
+        this.allarticle = data.artfromdb;
       });
   }
 

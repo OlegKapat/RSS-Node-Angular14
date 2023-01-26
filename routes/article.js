@@ -5,6 +5,7 @@ const passport=require('passport');
 
 router.post("/create",articlecontroller.create);
 router.get("/getarticle",passport.authenticate('jwt',{ session: false }), articlecontroller.getarticle);
+router.get("/getfilteredarticle", articlecontroller.getfilteredarticle);
 router.patch("/update/:id",articlecontroller.update);
 router.delete("/delete/:id",articlecontroller.delete);
 

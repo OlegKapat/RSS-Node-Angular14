@@ -18,6 +18,14 @@ export class GetarticleService {
       })
     })
   }
+  getFilteredArticle(params:any={}):Observable<Artticle[]>{
+    const API_URL = `${environment.articleURL}/${API_Methods.get_filteredarticle}`;
+    return this.http.get<Artticle[]>(API_URL,{
+      params:new HttpParams({
+        fromObject:params
+      })
+    })
+  }
   createArticle(article:Artticle):Observable<Artticle>{
     const API_URL = `${environment.articleURL}/${API_Methods.create_article}`;
     return this.http.post<Artticle>(API_URL,article)

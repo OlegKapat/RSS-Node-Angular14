@@ -2,8 +2,18 @@ const errorHandler = require("../utilites/errorHandler");
 const handler = require("../handler/handler");
 const Article = require("../models/article");
 const ArticleDTO = require("../models/modelsDTO/articleDTO");
+var debug = require("debug")("http");
 
 module.exports.getarticle = async function (req, res) {
+  const pageNumber = parseInt(req.query.pageNumber);
+  const queryRegx = new RegExp(req.query.find, "i");
+  const limit = parseInt(req.query.limit);
+  const sort = req.query.sort ? req.query.sort : "";
+  const result = {};
+  const totalArticle = await ArticleDTO.countDocuments().exec();
+
+  let startIndex = queryRegx ? null : pageNumber * limit;
+  const endIndex = (pageNumber + 1) * limit;
   ArticleDTO.createIndexes([
     { creator: "text" },
     { title: "text" },
@@ -16,17 +26,6 @@ module.exports.getarticle = async function (req, res) {
     },
   ]);
   try {
-    // Pagination
-    const pageNumber = parseInt(req.query.pageNumber);
-    const queryRegx = new RegExp(req.query.find, "i");
-    const limit = parseInt(req.query.limit);
-    const sort = req.query.sort ? req.query.sort : "";
-    const result = {};
-    const totalArticle = await ArticleDTO.countDocuments().exec();
-
-    let startIndex = queryRegx ? null : pageNumber * limit;
-    const endIndex = (pageNumber + 1) * limit;
-
     result.totalArticle = totalArticle;
     if (startIndex > 0) {
       result.previous = {
@@ -41,11 +40,7 @@ module.exports.getarticle = async function (req, res) {
       };
     }
 
-    var artfromdb = await ArticleDTO.find({
-       $text: { $search: queryRegx , $caseSensitive:false }
-      // or this query
-      //$or: [ { title:queryRegx:queryRegx},{content:queryRegx},{creator:queryRegx}, {link:queryRegx}]
-    })
+    var artfromdb = await ArticleDTO.find()
       .sort(sort)
       .skip(startIndex)
       .limit(limit)
@@ -88,6 +83,17 @@ module.exports.getarticle = async function (req, res) {
   }
 };
 
+module.exports.getfilteredarticle = async function (req, res) {
+  const queryRegx = new RegExp(req.query.find, "i");
+  try {
+    var artfromdb = await ArticleDTO.find({
+      $text: { $search: queryRegx, $caseSensitive: false },
+    }).exec();
+    res.status(200).json({ artfromdb });
+  } catch (e) {
+    errorHandler(res, e);
+  }
+};
 module.exports.update = async function (req, res) {
   try {
     const article = await ArticleDTO.findOneAndUpdate(
