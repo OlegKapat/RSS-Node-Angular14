@@ -1,0 +1,328 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.2.0"
+  title: "RSS parse - Server API"
+  contact:
+    email: "oleh@ukr.net"
+  # license:
+  #   name: "Apache 2.0"
+  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost"
+# basePath: "/v2"
+tags:
+  - name: "Login user"
+    description: "Login router endpoints"
+  - name: "Article"
+    description: "Articles router endpoints"
+schemes:
+  - "http"
+paths:
+  /api/login:
+    post:
+      tags:
+        - "Login user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Login credentials"
+          required: true
+          schema:
+            $ref: "#/definitions/UserLogin"
+
+      responses:
+        "200":
+          description: "User successfully logged in"
+          schema:
+            $ref: "#/definitions/UserLoginResponse"
+        "400":
+          description: "Validation error"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        "404":
+          description: "Not found error"
+          schema:
+            $ref: "#/definitions/NotFoundError"
+
+  /api/article/create:
+        post:
+          tags:
+            - "Article"
+          summary: "Create new article"
+          description: "This can only be done by the logged in users with"
+          operationId: "createArticle"
+          produces:
+            - "application/json"
+          parameters:
+            - in: "header"
+              name: Authorization
+              type: string
+              description: "Bearer jwt token"
+              required: true
+
+            - in: "body"
+              name: "body"
+              description: "New article fields"
+              required: true
+              schema:
+                $ref: "#/definitions/ArticleReqPOSTFields"
+
+          responses:
+            "200":
+              description: "Restaurant successfully created"
+              schema:
+                $ref: "#/definitions/ArticleReqPOSTFields"
+            "400":
+              description: "Validation error"
+              schema:
+                $ref: "#/definitions/ValidationError"
+            "403":
+              description: "Permission error"
+              schema:
+                $ref: "#/definitions/PermissionError"
+
+  /api/article/getarticle:
+    get:
+      tags:
+        - "Article"
+      summary: "Get all articles"
+      description: "This can only be done by the logged in users with"
+      operationId: "getAllArticles"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: Authorization
+          type: string
+          description: "Bearer jwt token"
+          required: true
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/ArticleReqGetFields"
+        "403":
+          description: "Permission error"
+          schema:
+            $ref: "#/definitions/PermissionError"
+
+  /api/article/update/${id}:
+    patch:
+      tags:
+        - "Article"
+      summary: "Edit article info"
+      description: "Update current article"
+      operationId: "editArticle"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          description: "Article id field"
+          type: integer
+          required: true
+
+        - in: "header"
+          name: Authorization
+          type: string
+          description: "Bearer jwt token"
+          required: true
+
+        - in: "body"
+          name: "body"
+          description: "Article fields to edit"
+          required: true
+          schema:
+            $ref: "#/definitions/ArticleReqPatchFields"
+
+      responses:
+        "200":
+          description: "Article successfully updated"
+          schema:
+            $ref: "#/definitions/ArticleReqPatchFields"
+        "400":
+          description: "Validation error"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        "403":
+          description: "Permission error"
+          schema:
+            $ref: "#/definitions/PermissionError"
+        "404":
+          description: "Not found error"
+          schema:
+            $ref: "#/definitions/NotFoundError"
+
+  /api/article/delete/{id}:
+    delete:
+      tags:
+        - "Article"
+      summary: "Delete article"
+      description: "This can only be done by the logged in users with"
+      operationId: "deleteArticle"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          description: "Article id field"
+          type: "integer"
+          required: true
+
+        - in: "header"
+          name: Authorization
+          type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/DeleteMessage"
+        "400":
+          description: "Validation error"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        "403":
+          description: "Permission error"
+          schema:
+            $ref: "#/definitions/PermissionError"
+        "404":
+          description: "Not found error"
+          schema:
+            $ref: "#/definitions/NotFoundError"
+
+definitions:
+  UserLogin:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      password:
+        type: "string"
+
+  UserLoginResponse:
+    type: "object"
+    properties:
+      user:
+        $ref: "#/definitions/LoginModel"
+
+      meta:
+        type: "object"
+        properties:
+          token:
+            type: "string"
+
+  LoginModel:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      password:
+        type: "string"
+
+  ArticleReqPOSTFields:
+    type: object
+    properties:
+      link:
+        type: string
+      title:
+        type: string
+      categories:
+        type: array
+      content:
+        type: string
+      contentSnippet:
+        type: string
+      creator: 
+        type: string
+      guid:
+        type: string
+      isoDate:
+        type: string
+      pubDate:
+        type: string
+
+  ArticleReqGetFields:
+    type: "array"
+    properties:
+      link:
+        type: "string"
+      title:
+        type: "string"
+      categories:
+        type: "array"
+      content:
+        type: "string"
+      contentSnippet:
+        type: "string"
+      creator: type:"string"
+      guid:
+        type: "string"
+      isoDate:
+        type: "string"
+      pubDate:
+      type: "string"
+
+  ArticleReqPatchFields:
+    type: object
+    properties:
+      link:
+        type: string
+      title:
+        type: string
+      categories:
+        type: array
+      content:
+        type: string
+      contentSnippet:
+        type: string
+      creator: 
+        type: string
+      guid:
+        type: string
+      isoDate:
+        type: string
+      pubDate:
+        type: string
+
+  DeleteMessage:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+
+  ValidationError:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      error:
+        type: "array"
+        items:
+          type: "object"
+
+  PermissionError:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      error:
+        type: "array"
+        items:
+          type: "object"
+
+  NotFoundError:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      error:
+        type: "array"
+        items:
+          type: "object"

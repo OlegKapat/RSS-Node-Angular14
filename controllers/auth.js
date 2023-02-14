@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const auth = require("../models/auth");
 const keys = process.env;
 
-module.exports.login = async function (req, res,next) {
+module.exports.login = async function (req, res, next) {
   const candidate = await auth.findOne({ name: req.body.name });
   if (candidate) {
     const passwordResult = bcrypt.compare(
@@ -19,12 +19,11 @@ module.exports.login = async function (req, res,next) {
         keys.secretkey,
         { expiresIn: 60 * 60 }
       );
-      console.log(token);
       res.status(200).json({
         token: `Bearer ${token}`,
         userId: candidate._id,
         name: candidate.name,
-        message: 'You made it to the secure route'
+        message: "You made it to the secure route",
       });
     } else {
       res.status(401).json({
